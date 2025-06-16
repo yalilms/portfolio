@@ -349,13 +349,14 @@ if (contactForm) {
         emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, templateParams)
             .then(function(response) {
                 // Success
-                showMessage('¡Mensaje enviado correctamente! Te responderé pronto.', 'success');
+                showMessage('¡Mensaje enviado correctamente! Te responderé pronto. 🎉', 'success');
                 contactForm.reset();
                 
-                // Redirect to thank you page after 2 seconds
-                setTimeout(() => {
-                    window.location.href = './thank-you.html';
-                }, 2000);
+                // Scroll to the message
+                document.querySelector('.contact__form').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
             })
             .catch(function(error) {
                 // Error
