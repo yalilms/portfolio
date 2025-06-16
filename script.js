@@ -299,7 +299,7 @@ showAllProjects();
 const contactForm = document.querySelector('#contact-form');
 
 // EmailJS Configuration
-const EMAIL_SERVICE_ID = 'service_9k6g8lk';
+const EMAIL_SERVICE_ID = 'service_6isgvxk';
 const EMAIL_TEMPLATE_ID = 'template_2h4j9dk';
 const EMAIL_PUBLIC_KEY = 'jAKlVP7bEYoU-RKV-';
 
