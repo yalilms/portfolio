@@ -1,0 +1,8 @@
+# Netlify redirects file
+# This handles client-side routing and form submissions
+
+# Handle form submissions
+/contact /thank-you.html 200
+
+# SPA fallback for any missed routes
+/*    /index.html   200 
