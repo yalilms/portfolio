@@ -749,12 +749,8 @@
                     </div>
                 </div>
 
-                <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html" class="contact__form grid">
-                    <!-- Hidden field for spam protection -->
-                    <input type="hidden" name="form-name" value="contact" />
-                    <div style="display: none;">
-                        <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-                    </div>
+                <form id="contact-form" class="contact__form grid">
+                    <!-- EmailJS powered form -->
                     
                     <div class="contact__inputs grid">
                         <div class="contact__content">
@@ -828,6 +824,16 @@
     <a href="#" class="scrollup" id="scroll-up">
         <i class="fas fa-arrow-up scrollup__icon"></i>
     </a>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init("jAKlVP7bEYoU-RKV-");
+        })();
+    </script>
 
     <!-- JavaScript -->
     <script src="script.js"></script>

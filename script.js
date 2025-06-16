@@ -295,18 +295,29 @@ function showAllProjects() {
 // Initialize
 showAllProjects();
 
-/*=============== CONTACT FORM ===============*/
-const contactForm = document.querySelector('.contact__form');
+/*=============== CONTACT FORM WITH EMAILJS ===============*/
+const contactForm = document.querySelector('#contact-form');
+
+// EmailJS Configuration
+const EMAIL_SERVICE_ID = 'service_9k6g8lk';
+const EMAIL_TEMPLATE_ID = 'template_2h4j9dk';
+const EMAIL_PUBLIC_KEY = 'jAKlVP7bEYoU-RKV-';
+
+// Initialize EmailJS
+emailjs.init(EMAIL_PUBLIC_KEY);
 
 if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
-        // Basic validation
+        e.preventDefault();
+        
+        // Get form data
         const name = document.querySelector('#name').value.trim();
         const email = document.querySelector('#email').value.trim();
+        const project = document.querySelector('#project').value.trim();
         const message = document.querySelector('#message').value.trim();
         
+        // Basic validation
         if (!name || !email || !message) {
-            e.preventDefault();
             showMessage('Por favor, rellena todos los campos obligatorios.', 'error');
             return;
         }
@@ -314,17 +325,48 @@ if (contactForm) {
         // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            e.preventDefault();
             showMessage('Por favor, introduce un email válido.', 'error');
             return;
         }
         
         // Show loading state
         const buttonText = document.querySelector('.button-text');
+        const originalText = buttonText.textContent;
         buttonText.textContent = 'Enviando...';
         contactForm.querySelector('button').disabled = true;
         
-        // Let Netlify handle the form submission naturally
+        // Prepare template parameters
+        const templateParams = {
+            to_name: 'Yalil Musa',
+            from_name: name,
+            from_email: email,
+            project: project || 'No especificado',
+            message: message,
+            reply_to: email
+        };
+        
+        // Send email using EmailJS
+        emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, templateParams)
+            .then(function(response) {
+                // Success
+                showMessage('¡Mensaje enviado correctamente! Te responderé pronto.', 'success');
+                contactForm.reset();
+                
+                // Redirect to thank you page after 2 seconds
+                setTimeout(() => {
+                    window.location.href = './thank-you.html';
+                }, 2000);
+            })
+            .catch(function(error) {
+                // Error
+                console.error('Error:', error);
+                showMessage('Error al enviar el mensaje. Inténtalo de nuevo.', 'error');
+            })
+            .finally(function() {
+                // Reset button
+                buttonText.textContent = originalText;
+                contactForm.querySelector('button').disabled = false;
+            });
     });
 }
 
