@@ -116,35 +116,8 @@ document.getElementById('scroll-up').addEventListener('click', function(e) {
     });
 });
 
-/*=============== DARK LIGHT THEME ===============*/
-const themeButton = document.getElementById('theme-button')
-const darkTheme = 'dark-theme'
-const iconTheme = 'fa-sun'
-
-// Previously selected topic (if user selected)
-const selectedTheme = localStorage.getItem('selected-theme')
-const selectedIcon = localStorage.getItem('selected-icon')
-
-// We obtain the current theme that the interface has by validating the dark-theme class
-const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light'
-const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? 'fa-moon' : 'fa-sun'
-
-// We validate if the user previously chose a topic
-if (selectedTheme) {
-  // If the validation is fulfilled, we ask what the issue was to know if we activated or deactivated the dark
-  document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme)
-  themeButton.classList[selectedIcon === 'fa-moon' ? 'add' : 'remove'](iconTheme)
-}
-
-// Activate / deactivate the theme manually with the button
-themeButton.addEventListener('click', () => {
-    // Add or remove the dark / icon theme
-    document.body.classList.toggle(darkTheme)
-    themeButton.classList.toggle(iconTheme)
-    // We save the theme and the current icon that the user chose
-    localStorage.setItem('selected-theme', getCurrentTheme())
-    localStorage.setItem('selected-icon', getCurrentIcon())
-})
+/*=============== THEME REMOVED ===============*/
+// Theme functionality removed - dark theme is now permanent default
 
 /*=============== TYPING ANIMATION ===============*/
 const typingText = document.getElementById('typing-text');
@@ -244,43 +217,40 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
-const sr = ScrollReveal({
-    origin: 'top',
-    distance: '60px',
-    duration: 2000,
-    delay: 200,
-    reset: true
-});
+// Using Intersection Observer for scroll animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
 
-// Check if ScrollReveal is loaded
-if (typeof ScrollReveal !== 'undefined') {
-    sr.reveal('.home__data, .about__img, .skills__subtitle, .skills__text', {});
-    sr.reveal('.home__img, .about__data, .skills__content, .portfolio__content, .contact__data', { delay: 400 });
-    sr.reveal('.home__social, .portfolio__item, .contact__information', { interval: 200 });
-} else {
-    // Fallback animation using Intersection Observer
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+const scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-
-    // Observe elements for animation
+// Initialize scroll animations when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    // Observe sections for animation
     document.querySelectorAll('.section').forEach(section => {
         section.style.opacity = '0';
         section.style.transform = 'translateY(50px)';
         section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(section);
+        scrollObserver.observe(section);
     });
-}
+
+    // Observe individual elements for staggered animation
+    document.querySelectorAll('.portfolio__item, .contact__information, .skills__content').forEach((element, index) => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(30px)';
+        element.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+        scrollObserver.observe(element);
+    });
+});
 
 /*=============== PORTFOLIO FILTER ===============*/
 // Since we're using CSS Grid instead of swiper, we can add simple filtering if needed
@@ -646,7 +616,7 @@ console.log(`
     └─────────────────────────────────────────┘
 `);
 
-console.log('💻 Portafolio desarrollado por Yalil Musa Fernández');
+console.log('💻 Portafolio desarrollado por Yalil Musa Talhaoui');
 console.log('🌟 ¿Te gusta el código? ¡Revisemos el repositorio juntos!');
 console.log('📍 Desarrollando desde Granada, España');
 
@@ -654,11 +624,7 @@ console.log('📍 Desarrollando desde Granada, España');
 // Initialize all functions when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🎯 Portafolio inicializado correctamente');
-    
-    // Set default theme to dark
-    if (!localStorage.getItem('selected-theme')) {
-        document.body.classList.add('dark-theme');
-        localStorage.setItem('selected-theme', 'dark');
-        localStorage.setItem('selected-icon', 'fa-sun');
-    }
+
+    // Set permanent dark theme
+    document.body.classList.add('dark-theme');
 }); 
