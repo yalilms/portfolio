@@ -1420,6 +1420,9 @@ table {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .portfolio__item::before {
@@ -1511,9 +1514,17 @@ table {
   border: 1px solid rgba(0, 255, 65, 0.3);
 }
 
+.portfolio__item-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .portfolio__item-links {
   display: flex;
   gap: 1rem;
+  margin-top: auto;
+  padding-top: 1rem;
 }
 
 .portfolio__link {
